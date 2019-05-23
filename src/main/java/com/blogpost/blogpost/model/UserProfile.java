@@ -31,6 +31,5 @@ public class UserProfile {
     private List<UserProfile> following;
     private List<UserProfile> followers;
     private String image;
-    @DBRef
     private List<Post> posts;
 }

@@ -1,6 +1,7 @@
 package com.blogpost.blogpost.resources;
 
 import com.blogpost.blogpost.model.UserProfile;
+import com.blogpost.blogpost.repository.PostRepository;
 import com.blogpost.blogpost.repository.UserProfileRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class UserProfileResource {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     @GetMapping(value = "/get-user-profiles")
     public List<UserProfile> getAllUserProfiles() {
         return userProfileRepository.findAll();
@@ -22,7 +26,9 @@ public class UserProfileResource {
 
     @GetMapping("get-user-profile/{id}")
     public UserProfile getUserProfileById(@PathVariable("id") String id){
-       return userProfileRepository.findById(id).get();
+        UserProfile userProfile = userProfileRepository.findById(id).get();
+        userProfile.setPosts(postRepository.findByUsername(userProfile.getUsername()));
+       return userProfile;
     }
 
     @DeleteMapping("/delete-user-profile/{id}")

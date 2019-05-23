@@ -26,4 +26,5 @@ public class Post {
     private String dateUpdated;
     private List<String> tags;
     private int likes;
+    private String username;
 }
