@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,15 @@ public class UserProfileResource {
 
     @GetMapping(value = "/get-user-profiles")
     public List<UserProfile> getAllUserProfiles() {
-        return userProfileRepository.findAll();
+        List<UserProfile> userProfileList = userProfileRepository.findAll();
+        Iterator<UserProfile> userProfileIterator = userProfileList.listIterator();
+        UserProfile userProfile;
+
+        while (userProfileIterator.hasNext()) {
+            userProfile = userProfileIterator.next();
+            userProfile.setPosts(postRepository.findByUsername(userProfile.getUsername()));
+        }
+        return userProfileList;
     }
 
     @GetMapping("get-user-profile/{id}")
