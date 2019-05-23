@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
@@ -23,7 +24,6 @@ public class Post {
     private String body;
     private String datePosted;
     private String dateUpdated;
-    private List<Post> tags;
+    private List<String> tags;
     private int likes;
-    Set<UserProfile> userProfiles = new HashSet<>();
 }

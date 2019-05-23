@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
@@ -30,6 +31,6 @@ public class UserProfile {
     private List<UserProfile> following;
     private List<UserProfile> followers;
     private String image;
+    @DBRef
     private List<Post> posts;
-    //Set<Post> post = new HashSet<>();
 }
