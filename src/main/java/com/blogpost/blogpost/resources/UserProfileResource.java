@@ -1,9 +1,13 @@
 package com.blogpost.blogpost.resources;
 
+import com.blogpost.blogpost.model.UserAccount;
 import com.blogpost.blogpost.model.UserProfile;
+import com.blogpost.blogpost.model.dto.UpdateUserAccountDTO;
 import com.blogpost.blogpost.repository.PostRepository;
+import com.blogpost.blogpost.repository.UserAccountRepository;
 import com.blogpost.blogpost.repository.UserProfileRepository;
 
+import com.blogpost.blogpost.util.BlogPostUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +19,20 @@ import java.util.List;
 @RequestMapping("/user-profiles/api")
 public class UserProfileResource {
     @Autowired
+    private BlogPostUtil blogPostUtil;
+
+    @Autowired
     private UserProfileRepository userProfileRepository;
 
     @Autowired
     private PostRepository postRepository;
 
+    private UserProfile userProfile;
+
     @GetMapping(value = "/get-user-profiles")
     public List<UserProfile> getAllUserProfiles() {
         List<UserProfile> userProfileList = userProfileRepository.findAll();
         Iterator<UserProfile> userProfileIterator = userProfileList.listIterator();
-        UserProfile userProfile;
 
         while (userProfileIterator.hasNext()) {
             userProfile = userProfileIterator.next();
@@ -35,7 +43,7 @@ public class UserProfileResource {
 
     @GetMapping("get-user-profile/{id}")
     public UserProfile getUserProfileById(@PathVariable("id") String id){
-        UserProfile userProfile = userProfileRepository.findById(id).get();
+        userProfile = userProfileRepository.findById(id).get();
         userProfile.setPosts(postRepository.findByUsername(userProfile.getUsername()));
        return userProfile;
     }
@@ -53,9 +61,8 @@ public class UserProfileResource {
         return userProfile;
     }
 
-    @PutMapping("/update-user-profile/{id}")
-    public void updateUserProfile(@PathVariable("id") String id, @Valid @RequestBody UserProfile userProfile) {
-        userProfile.setId(id);
-        userProfileRepository.save(userProfile);
+    @PutMapping("/update-user-profile/")
+    public void updateUserProfile(@Valid @RequestBody UpdateUserAccountDTO updateUserAccountDTO) {
+        blogPostUtil.updateUserProfile(updateUserAccountDTO);
     }
 }
