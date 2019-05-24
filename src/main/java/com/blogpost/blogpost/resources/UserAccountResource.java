@@ -27,13 +27,12 @@ public class UserAccountResource {
     private UserProfileRepository userProfileRepository;
 
     private UserProfile userProfile;
-    private  UserAccount userAccount;
+    private UserAccount userAccount;
 
     @GetMapping(value = "/get-user-account")
     public List<UserAccount> getAllUserAccounts() {
         List<UserAccount> userAccountList = userAccountRepository.findAll();
         Iterator<UserAccount> userAccountIterator = userAccountList.listIterator();
-        UserAccount userAccount;
 
         while (userAccountIterator.hasNext()) {
             userAccount = userAccountIterator.next();
@@ -44,20 +43,19 @@ public class UserAccountResource {
 
     @GetMapping(value = "/get-user-account/{id}")
     public UserAccount getUserAccountById(@PathVariable("id") String id) {
-        UserAccount userAccount = userAccountRepository.findById(id).get();
+        userAccount = userAccountRepository.findById(id).get();
         userAccount.setUserProfile(userProfileRepository.findByUsername(userAccount.getUsername()));
         return userAccount;
     }
 
     @DeleteMapping("/delete-user-account/{id}")
     public void deleteUserAccount(@PathVariable("id") String id) {
-        UserAccount userAccount = userAccountRepository.findById(id).get();
+        userAccount = userAccountRepository.findById(id).get();
         userAccountRepository.delete(userAccount);
     }
 
     @PostMapping("/create-user-account")
     public UserRegistrationDTO createUserAccount(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
-
         userAccount.setAccountType(userRegistrationDTO.getAccountType());
         userAccount.setDateCreated(userRegistrationDTO.getDateCreated());
         userAccount.setUsername(userRegistrationDTO.getUsername());
@@ -83,6 +81,8 @@ public class UserAccountResource {
 
     @PutMapping("/update-user-account/")
     public void updateUserAccount(@Valid @RequestBody UpdateUserAccountDTO updateUserAccountDTO) {
+        userAccount = userAccountRepository.findById(updateUserAccountDTO.getId()).get();
+        userProfile = userProfileRepository.findByUsername(userAccount.getUsername());
         blogPostUtil.updateUserAccount(updateUserAccountDTO);
     }
 }

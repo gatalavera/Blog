@@ -25,9 +25,13 @@ public class UserProfileResource {
     private UserProfileRepository userProfileRepository;
 
     @Autowired
+    private UserAccountRepository userAccountRepository;
+
+    @Autowired
     private PostRepository postRepository;
 
     private UserProfile userProfile;
+    private UserAccount userAccount;
 
     @GetMapping(value = "/get-user-profiles")
     public List<UserProfile> getAllUserProfiles() {
@@ -42,15 +46,15 @@ public class UserProfileResource {
     }
 
     @GetMapping("get-user-profile/{id}")
-    public UserProfile getUserProfileById(@PathVariable("id") String id){
+    public UserProfile getUserProfileById(@PathVariable("id") String id) {
         userProfile = userProfileRepository.findById(id).get();
         userProfile.setPosts(postRepository.findByUsername(userProfile.getUsername()));
-       return userProfile;
+        return userProfile;
     }
 
     @DeleteMapping("/delete-user-profile/{id}")
     public void deleteUserProfile(@PathVariable("id") String id) {
-        UserProfile userProfile = userProfileRepository.findById(id).get();
+        userProfile = userProfileRepository.findById(id).get();
         userProfileRepository.delete(userProfile);
     }
 
@@ -63,6 +67,8 @@ public class UserProfileResource {
 
     @PutMapping("/update-user-profile/")
     public void updateUserProfile(@Valid @RequestBody UpdateUserAccountDTO updateUserAccountDTO) {
-        blogPostUtil.updateUserProfile(updateUserAccountDTO);
+        userProfile = userProfileRepository.findById(updateUserAccountDTO.getId()).get();
+        userAccount = userAccountRepository.findByUsername(userProfile.getUsername());
+        blogPostUtil.updateUserAccount(updateUserAccountDTO);
     }
 }
