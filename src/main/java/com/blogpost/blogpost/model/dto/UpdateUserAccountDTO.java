@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class UpdateUserAccountDTO {
-    private  String id;
+    private String id;
     private String username;
     private String password;
     private String email;
